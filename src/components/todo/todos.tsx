@@ -14,9 +14,11 @@ export const Todos = ({ initialTodos }: TodosProps) => {
   return (
     <>
       <AddTodo setTodos={setTodos} />
-      {todos.map((todo) => (
-        <Todo key={todo._id} todo={todo} />
-      ))}
+      <ul className="max-w-80 mx-auto">
+        {todos.map((todo) => (
+          <Todo key={todo._id} todo={todo} setTodos={setTodos} />
+        ))}
+      </ul>
     </>
   );
 };

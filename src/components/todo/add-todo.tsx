@@ -42,6 +42,7 @@ export const AddTodo = ({ setTodos }: AddTodoProps) => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         className="px-3 py-1 w-80 bg-transparent border"
+        placeholder="add new todo"
       />
     </form>
   );

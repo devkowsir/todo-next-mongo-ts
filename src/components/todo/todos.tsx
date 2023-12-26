@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AddTodo } from "./add-todo";
-import { TodoList } from "./todo-list";
+import { Todo } from "./todo";
 
 interface TodosProps {
   initialTodos: ITodo[];
@@ -14,7 +14,9 @@ export const Todos = ({ initialTodos }: TodosProps) => {
   return (
     <>
       <AddTodo setTodos={setTodos} />
-      <TodoList todos={todos} />
+      {todos.map((todo) => (
+        <Todo key={todo._id} todo={todo} />
+      ))}
     </>
   );
 };

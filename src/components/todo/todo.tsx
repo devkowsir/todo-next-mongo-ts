@@ -31,6 +31,13 @@ export const Todo = ({
 
   const handleDelete = useCallback(async () => {
     setTodos((todos) => todos.filter((todo) => todo._id !== _id));
+    try {
+      const res = await deleteTodo(_id);
+      if (!res.success) throw "Something went wrong in the server";
+    } catch (error) {
+      setTodos((todos) => [...todos, { _id, title, completed }]);
+      console.error(error);
+    }
   }, [setTodos]);
 
   return (

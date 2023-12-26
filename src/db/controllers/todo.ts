@@ -47,3 +47,14 @@ export async function toggleCompletion(id: string) {
     return { success: false };
   }
 }
+
+export async function deleteTodo(id: string) {
+  try {
+    await dbConnect();
+    await Todo.findByIdAndDelete(id);
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false };
+  }
+}

@@ -34,3 +34,16 @@ export async function addTodo(title: string) {
     return { success: false };
   }
 }
+
+export async function toggleCompletion(id: string) {
+  try {
+    await dbConnect();
+    await Todo.findByIdAndUpdate(id, [
+      { $set: { completed: { $not: "$completed" } } },
+    ]);
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false };
+  }
+}

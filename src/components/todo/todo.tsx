@@ -1,3 +1,4 @@
+import { toggleCompletion } from "@/db/controllers/todo";
 import { Dispatch, SetStateAction, useCallback } from "react";
 
 interface TodoProps {
@@ -19,17 +20,27 @@ export const Todo = ({
     };
 
     toggleCompletionState();
+    try {
+      const res = await toggleCompletion(_id);
+      if (!res.success) throw "Something went wrong in the server";
+    } catch (error) {
+      toggleCompletionState();
+      console.error(error);
+    }
   }, [setTodos]);
 
   return (
-    <li className="flex gap-2">
+    <li className="flex gap-2 items-center">
       <input
         className="cursor-pointer"
         type="checkbox"
         checked={completed}
         onChange={handleToggleCompletion}
       />
-      <div className="cursor-pointer" onClick={handleToggleCompletion}>
+      <div
+        className={`cursor-pointer${completed ? " line-through" : ""}`}
+        onClick={handleToggleCompletion}
+      >
         {title}
       </div>
     </li>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AddTodo } from "./add-todo";
+import { TodoList } from "./todo-list";
 
 interface TodosProps {
   initialTodos: ITodo[];
@@ -13,11 +14,7 @@ export const Todos = ({ initialTodos }: TodosProps) => {
   return (
     <>
       <AddTodo setTodos={setTodos} />
-      <ul className="flex flex-col items-center gap-2">
-        {todos.map((todo) => (
-          <li key={todo._id}>{todo.title}</li>
-        ))}
-      </ul>
+      <TodoList todos={todos} />
     </>
   );
 };

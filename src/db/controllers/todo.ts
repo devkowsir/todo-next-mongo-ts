@@ -1,3 +1,5 @@
+"use server";
+
 import { FilterQuery } from "mongoose";
 import dbConnect from "..";
 import { Todo, TodoInput } from "../models";
@@ -19,5 +21,16 @@ export async function getTodos(
   } catch (error) {
     console.error(error);
     return [];
+  }
+}
+
+export async function addTodo(title: string) {
+  try {
+    await dbConnect();
+    const newTodo = await Todo.create({ title: title });
+    return { success: true, _id: newTodo._id.toString() };
+  } catch (error) {
+    console.error(error);
+    return { success: false };
   }
 }

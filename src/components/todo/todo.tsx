@@ -1,4 +1,4 @@
-import { toggleCompletion } from "@/db/controllers/todo";
+import { deleteTodo, toggleCompletion } from "@/db/controllers/todo";
 import { Dispatch, SetStateAction, useCallback } from "react";
 
 interface TodoProps {
@@ -29,6 +29,10 @@ export const Todo = ({
     }
   }, [setTodos]);
 
+  const handleDelete = useCallback(async () => {
+    setTodos((todos) => todos.filter((todo) => todo._id !== _id));
+  }, [setTodos]);
+
   return (
     <li className="flex gap-2 items-center">
       <input
@@ -43,6 +47,13 @@ export const Todo = ({
       >
         {title}
       </div>
+      <button
+        className="cursor-pointer ml-auto"
+        type="button"
+        onClick={handleDelete}
+      >
+        X
+      </button>
     </li>
   );
 };

@@ -11,7 +11,7 @@ if (uri === undefined) throw "set DATABASE_URI environment variable";
 export default async function dbConnect() {
   try {
     if (!global.db || typeof global.db !== typeof mongoose) {
-      console.log("Stablishing DB connection");
+      console.log("Establishing DB connection");
       global.db = await mongoose.connect(uri);
     }
     return global.db;

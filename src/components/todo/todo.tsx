@@ -1,5 +1,5 @@
 import { deleteTodo, toggleCompletion } from "@/db/controllers/todo";
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { Dispatch, DragEventHandler, SetStateAction, useCallback } from "react";
 
 interface TodoProps {
   todo: ITodo;
@@ -40,25 +40,35 @@ export const Todo = ({
     }
   }, [setTodos]);
 
+  const dragOverHandler: DragEventHandler<HTMLLIElement> = (e) => {
+    e.preventDefault();
+
+    console.log([
+      e.clientY,
+      e.currentTarget.offsetTop,
+      e.currentTarget.offsetHeight,
+    ]);
+  };
+
   return (
-    <li className="flex gap-2 items-center">
+    <li
+      className="flex gap-2 items-center p-2 border cursor-pointer"
+      draggable
+      onDragOver={dragOverHandler}
+    >
       <input
-        className="cursor-pointer"
+        className=""
         type="checkbox"
         checked={completed}
         onChange={handleToggleCompletion}
       />
       <div
-        className={`cursor-pointer${completed ? " line-through" : ""}`}
+        className={`${completed ? " line-through" : ""}`}
         onClick={handleToggleCompletion}
       >
         {title}
       </div>
-      <button
-        className="cursor-pointer ml-auto"
-        type="button"
-        onClick={handleDelete}
-      >
+      <button className="ml-auto" type="button" onClick={handleDelete}>
         X
       </button>
     </li>

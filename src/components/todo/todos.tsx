@@ -14,7 +14,7 @@ export const Todos = ({ initialTodos }: TodosProps) => {
   return (
     <>
       <AddTodo setTodos={setTodos} />
-      <ul className="max-w-80 mx-auto">
+      <ul className="flex flex-col gap-2 max-w-80 mx-auto">
         {todos.map((todo) => (
           <Todo key={todo._id} todo={todo} setTodos={setTodos} />
         ))}

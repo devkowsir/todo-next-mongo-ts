@@ -1,15 +1,28 @@
 import { deleteTodo, toggleCompletion } from "@/db/controllers/todo";
-import { Dispatch, DragEventHandler, SetStateAction, useCallback } from "react";
+import {
+  Dispatch,
+  DragEventHandler,
+  RefObject,
+  SetStateAction,
+  useCallback,
+  useState,
+} from "react";
 
 interface TodoProps {
   todo: ITodo;
   setTodos: Dispatch<SetStateAction<ITodo[]>>;
+  paretRef: RefObject<HTMLUListElement>;
 }
+
+const liClasses =
+  "flex gap-2 items-center p-2 border cursor-pointer transition-transform ease-in-out";
 
 export const Todo = ({
   todo: { _id, completed, title },
   setTodos,
+  paretRef,
 }: TodoProps) => {
+  const [isDragging, setIsDragging] = useState(false);
   const handleToggleCompletion = useCallback(async () => {
     const toggleCompletionState = () => {
       setTodos((todos) =>
@@ -40,21 +53,20 @@ export const Todo = ({
     }
   }, [setTodos]);
 
-  const dragOverHandler: DragEventHandler<HTMLLIElement> = (e) => {
-    e.preventDefault();
-
-    console.log([
-      e.clientY,
-      e.currentTarget.offsetTop,
-      e.currentTarget.offsetHeight,
-    ]);
+  const dragEndHandler: DragEventHandler<HTMLLIElement> = () => {
+    setIsDragging(false);
+    if (!paretRef.current) return;
+    const listItems = paretRef.current.querySelectorAll("li");
+    for (let i = 0; i < listItems.length; i++)
+      listItems[i].style.transform = "translateY(0)";
   };
 
   return (
     <li
-      className="flex gap-2 items-center p-2 border cursor-pointer"
+      className={`${liClasses}${isDragging ? " dragging" : ""}`}
       draggable
-      onDragOver={dragOverHandler}
+      onDragStart={() => setIsDragging(true)}
+      onDragEnd={dragEndHandler}
     >
       <input
         className=""

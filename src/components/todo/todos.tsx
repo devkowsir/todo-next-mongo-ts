@@ -37,27 +37,35 @@ export const Todos = ({ initialTodos }: TodosProps) => {
       n = heights.length;
 
     const listItems = listHolderRef.current.querySelectorAll("li");
-    let i = 0;
-    for (; i < listItems.length; i++)
-      if (listItems[i].classList.contains("dragging")) break;
+    let initial = 0;
+    for (; initial < listItems.length; initial++)
+      if (listItems[initial].classList.contains("dragging")) break;
 
-    let j = 0;
-    if (clientY > topOffsets[n - 1] + heights[n - 1] / 2) j = n - 1;
+    let current = 0;
+    if (clientY > topOffsets[n - 1] + heights[n - 1] / 2) current = n - 1;
     else
-      for (; j < n; j++) if (clientY <= topOffsets[j] + heights[j] / 2) break;
+      for (; current < n; current++)
+        if (clientY <= topOffsets[current] + heights[current] / 2) break;
 
     for (let k = 0; k < listItems.length; k++) {
-      if (k === i || (k < i && k < j) || (k > i && k > j)) {
+      if (
+        k === initial ||
+        (k < initial && k < current) ||
+        (k > initial && k > current)
+      ) {
         listItems[k].style.transform = "translateY(0)";
         continue;
       }
 
-      if (i > j) {
+      if (initial > current) {
         const translateY =
-          topOffsets[i] - topOffsets[i - 1] - heights[i - 1] + heights[i];
+          topOffsets[initial] -
+          topOffsets[initial - 1] -
+          heights[initial - 1] +
+          heights[initial];
         listItems[k].style.transform = `translateY(${translateY}px)`;
-      } else if (i < j) {
-        const translateY = topOffsets[i + 1] - topOffsets[i];
+      } else if (initial < current) {
+        const translateY = topOffsets[initial + 1] - topOffsets[initial];
         listItems[k].style.transform = `translateY(-${translateY}px)`;
       }
     }

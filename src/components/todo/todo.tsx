@@ -1,17 +1,12 @@
 import { deleteTodo, toggleCompletion } from "@/db/controllers/todo";
-import {
-  Dispatch,
-  DragEventHandler,
-  RefObject,
-  SetStateAction,
-  useCallback,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useCallback, useRef } from "react";
 
 interface TodoProps {
   todo: ITodo;
   setTodos: Dispatch<SetStateAction<ITodo[]>>;
-  paretRef: RefObject<HTMLUListElement>;
+  setDragItemIndex: Dispatch<SetStateAction<number | null>>;
+  setDragOverItemIndex: Dispatch<SetStateAction<number | null>>;
+  index: number;
 }
 
 const liClasses =
@@ -20,9 +15,10 @@ const liClasses =
 export const Todo = ({
   todo: { _id, completed, title },
   setTodos,
-  paretRef,
+  setDragItemIndex,
+  setDragOverItemIndex,
+  index,
 }: TodoProps) => {
-  const [isDragging, setIsDragging] = useState(false);
   const handleToggleCompletion = useCallback(async () => {
     const toggleCompletionState = () => {
       setTodos((todos) =>
@@ -53,29 +49,26 @@ export const Todo = ({
     }
   }, [setTodos]);
 
-  const dragEndHandler: DragEventHandler<HTMLLIElement> = () => {
-    setIsDragging(false);
-    if (!paretRef.current) return;
-    const listItems = paretRef.current.querySelectorAll("li");
-    for (let i = 0; i < listItems.length; i++)
-      listItems[i].style.transform = "translateY(0)";
-  };
-
   return (
     <li
-      className={`${liClasses}${isDragging ? " dragging" : ""}`}
+      className={liClasses}
+      onDragStart={() => setDragItemIndex(index)}
+      onDragEnd={() => {
+        setDragItemIndex(null);
+        setDragOverItemIndex(null);
+      }}
+      onDragOver={(e) => e.preventDefault()}
+      onDragEnter={() => setDragOverItemIndex(index)}
+      onDragLeave={() => setDragOverItemIndex(null)}
       draggable
-      onDragStart={() => setIsDragging(true)}
-      onDragEnd={dragEndHandler}
     >
       <input
-        className=""
         type="checkbox"
         checked={completed}
         onChange={handleToggleCompletion}
       />
       <div
-        className={`${completed ? " line-through" : ""}`}
+        className={`${completed ? "line-through " : ""}grow`}
         onClick={handleToggleCompletion}
       >
         {title}

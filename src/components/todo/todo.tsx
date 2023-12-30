@@ -59,6 +59,7 @@ export const Todo = ({
       }}
       onDragOver={(e) => e.preventDefault()}
       onDragEnter={() => setDragOverItemIndex(index)}
+      onDragLeaveCapture={(e) => e.stopPropagation()}
       onDragLeave={() => setDragOverItemIndex(null)}
       draggable
     >

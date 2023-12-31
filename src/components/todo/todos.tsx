@@ -45,21 +45,3 @@ export const Todos = ({ initialTodos }: TodosProps) => {
     </>
   );
 };
-
-// const timerRef = useRef<{ timer: NodeJS.Timeout | null }>({ timer: null });
-
-//   onTouchStart={(e) => {
-//     console.log(e.touches[0]);
-//     timerRef.current.timer = setTimeout(() => setDragItemIndex(index), 400);
-//   }}
-//   onTouchEnd={() => {
-//     if (timerRef.current.timer) clearTimeout(timerRef.current.timer);
-//     timerRef.current.timer = null;
-//     setDragItemIndex(null);
-//   }}
-//   onTouchCancel={() => {
-//     if (timerRef.current.timer) clearTimeout(timerRef.current.timer);
-//     timerRef.current.timer = null;
-//     setDragItemIndex(null);
-//   }}
-//   onTouchMove={(e) => console.log(e.changedTouches[0])}

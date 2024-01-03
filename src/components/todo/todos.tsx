@@ -16,7 +16,6 @@ export const Todos = ({ initialTodos }: TodosProps) => {
   const [dragItemIndex, setDragItemIndex] = useState<index>(null);
   const [dragOverItemIndex, setDragOverItemIndex] = useState<index>(null);
 
-  console.log(dragItemIndex, dragOverItemIndex);
   const dropCaptureHandler: DragEventHandler<HTMLElement> = (e) => {
     if (dragItemIndex == null || dragOverItemIndex == null) return;
     setTodos((todos) => move(todos, dragItemIndex, dragOverItemIndex));

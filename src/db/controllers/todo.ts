@@ -22,6 +22,8 @@ export async function getTodos(
 
 export async function addTodo(title: string) {
   try {
+    const authInfo = getAuthInfo();
+    if (!authInfo) return { success: false };
     await dbConnect();
     const newTodo = await Todo.create({ title: title });
     return { success: true, id: newTodo.id as string };

@@ -1,4 +1,3 @@
-import { addTodo } from "@/db/controllers/todo";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 
 interface AddTodoProps {
@@ -20,11 +19,16 @@ export const AddTodo = ({ setTodos }: AddTodoProps) => {
     setTitle("");
 
     try {
-      const res = await addTodo(title);
-      if (!res.success) throw "Something went wrong in the server!";
-      // if success is true, an _id is returned, thus todos is updated.
+      const res = await fetch("/api/todo", {
+        method: "POST",
+        body: JSON.stringify({
+          title,
+        }),
+      });
+      if (!res.ok) throw "Something went wrong in the server!";
+      const data = (await res.json()) as { id: string };
       setTodos((todos) =>
-        todos.map((todo) => (todo.id === id ? { ...todo, id: res.id! } : todo))
+        todos.map((todo) => (todo.id === id ? { ...todo, id: data.id } : todo))
       );
     } catch (error) {
       setTodos((todos) => todos.filter((todo) => todo.id !== id));

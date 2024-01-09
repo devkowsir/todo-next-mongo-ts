@@ -8,7 +8,7 @@ export interface TodoInput {
 
 const todoSchema = new Schema<TodoInput>({
   title: { type: String, required: true, minlength: 2, maxlength: 128 },
-  user: { type: SchemaTypes.ObjectId, ref: "User" },
+  user: { type: SchemaTypes.ObjectId, required: true, ref: "User" },
   completed: { type: Boolean, default: false },
 });
 

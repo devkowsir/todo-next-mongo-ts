@@ -28,7 +28,7 @@ export async function addTodo(title: string) {
   try {
     await dbConnect();
     const newTodo = await Todo.create({ title: title });
-    return { success: true, _id: newTodo._id.toString() };
+    return { success: true, id: newTodo.id as string };
   } catch (error) {
     console.error(error);
     return { success: false };

@@ -1,6 +1,7 @@
 "use server";
 
-import { FilterQuery } from "mongoose";
+import getAuthInfo from "@/utils/get-auth-session";
+import { FilterQuery, HydratedDocument } from "mongoose";
 import dbConnect from "..";
 import { Todo, TodoInput } from "../models";
 

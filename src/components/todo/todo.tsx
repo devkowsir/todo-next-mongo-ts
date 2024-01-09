@@ -13,7 +13,7 @@ const liClasses =
   "flex gap-2 items-center p-2 border cursor-pointer transition-transform ease-in-out";
 
 export const Todo = ({
-  todo: { _id, completed, title },
+  todo: { id, completed, title },
   setTodos,
   setDragItemIndex,
   setDragOverItemIndex,
@@ -23,14 +23,14 @@ export const Todo = ({
     const toggleCompletionState = () => {
       setTodos((todos) =>
         todos.map((todo) =>
-          todo._id === _id ? { ...todo, completed: !todo.completed } : todo
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo
         )
       );
     };
 
     toggleCompletionState();
     try {
-      const res = await toggleCompletion(_id);
+      const res = await toggleCompletion(id);
       if (!res.success) throw "Something went wrong in the server";
     } catch (error) {
       toggleCompletionState();
@@ -39,12 +39,12 @@ export const Todo = ({
   }, [setTodos]);
 
   const handleDelete = useCallback(async () => {
-    setTodos((todos) => todos.filter((todo) => todo._id !== _id));
+    setTodos((todos) => todos.filter((todo) => todo.id !== id));
     try {
-      const res = await deleteTodo(_id);
+      const res = await deleteTodo(id);
       if (!res.success) throw "Something went wrong in the server";
     } catch (error) {
-      setTodos((todos) => [...todos, { _id, title, completed }]);
+      setTodos((todos) => [...todos, { id, title, completed }]);
       console.error(error);
     }
   }, [setTodos]);

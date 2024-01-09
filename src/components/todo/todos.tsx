@@ -32,7 +32,7 @@ export const Todos = ({ initialTodos }: TodosProps) => {
       >
         {todos.map((todo, index) => (
           <Todo
-            key={todo._id}
+            key={todo.id}
             todo={todo}
             setTodos={setTodos}
             index={index}

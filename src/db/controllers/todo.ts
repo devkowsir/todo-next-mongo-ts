@@ -9,18 +9,14 @@ export async function getTodos(
 ): Promise<ITodo[]> {
   try {
     await dbConnect();
-    const todos = await Todo.find(filter);
-    return todos.map((todo) =>
-      todo.toObject({
-        // converts objectid to string
-        flattenObjectIds: true,
-        // removes version key
-        versionKey: false,
-      })
-    );
+    const todos = await Todo.find<HydratedDocument<ITodo>>(filter);
+    return todos.map((todo) => ({
+      id: todo.id,
+      completed: todo.completed,
+      title: todo.title,
+    }));
   } catch (error) {
-    console.error(error);
-    return [];
+    throw error;
   }
 }
 

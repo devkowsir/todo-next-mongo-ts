@@ -19,7 +19,7 @@ export const AddTodo = ({ setTodos }: AddTodoProps) => {
     setTitle("");
 
     try {
-      const res = await fetch("/api/todo", {
+      const res = await fetch("/api/todos", {
         method: "POST",
         body: JSON.stringify({
           title,

@@ -34,7 +34,7 @@ const userSchema = new Schema<UserInput>({
     required: true,
     minlength: [6, "Password must be at least 6 characters long"],
   },
-  todos: { type: [SchemaTypes.ObjectId], default: [], ref: "Todo" },
+  todos: [{ type: SchemaTypes.ObjectId, default: [], ref: "Todo" }],
   isVerified: { type: Boolean, default: false },
   isAdmin: { type: Boolean, default: false },
   verifyToken: { type: String },

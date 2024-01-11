@@ -6,20 +6,14 @@ import dbConnect from "..";
 import { Todo, TodoInput } from "../models";
 import { User } from "../models/user";
 
-export async function getTodos(
-  filter: FilterQuery<TodoInput> = {}
-): Promise<ITodo[]> {
-  try {
-    await dbConnect();
-    const todos = await Todo.find<HydratedDocument<ITodo>>(filter);
-    return todos.map((todo) => ({
-      id: todo.id,
-      completed: todo.completed,
-      title: todo.title,
-    }));
-  } catch (error) {
-    throw error;
-  }
+export async function getTodos(filter: FilterQuery<TodoInput> = {}) {
+  await dbConnect();
+  const todos = await Todo.find<HydratedDocument<ITodo>>(filter);
+  return todos.map((todo) => ({
+    id: todo.id,
+    completed: todo.completed,
+    title: todo.title,
+  })) as ITodo[];
 }
 
 export async function addTodo(todo: TodoInput) {

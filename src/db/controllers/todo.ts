@@ -16,6 +16,11 @@ export async function getTodos(filter: FilterQuery<TodoInput> = {}) {
   })) as ITodo[];
 }
 
+export async function getTodo(id: string) {
+  await dbConnect();
+  return await Todo.findById(id, { user: true });
+}
+
 export async function addTodo(todo: TodoInput) {
   await dbConnect();
   const addedTodo = await Todo.create<HydratedDocument<ITodo>>(todo);

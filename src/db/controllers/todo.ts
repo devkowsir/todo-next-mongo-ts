@@ -31,12 +31,12 @@ export async function addTodo(todo: TodoInput) {
 }
 
 export async function deleteTodo(id: string) {
-  try {
-    await dbConnect();
-    await Todo.findByIdAndDelete(id);
-    return { success: true };
-  } catch (error) {
-    console.error(error);
-    return { success: false };
-  }
+  await dbConnect();
+  await Todo.findByIdAndDelete(id);
+}
+
+export async function updateTodo(id: string, data: UpdateQuery<TodoInput>) {
+  await dbConnect();
+  const updatedDoc = await Todo.findByIdAndUpdate(id, { $set: { ...data } });
+  return updatedDoc?.id ?? null;
 }

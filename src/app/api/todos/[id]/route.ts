@@ -1,5 +1,28 @@
-import { getTodo, updateTodo } from "@/db/controllers/todo";
+import { deleteTodo, getTodo, updateTodo } from "@/db/controllers/todo";
 import getAuthInfo from "@/utils/get-auth-session";
+
+export async function DELETE(
+  _: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const authInfo = getAuthInfo();
+    if (!authInfo) return new Response("Unauthorized", { status: 401 });
+
+    const todo = await getTodo(params.id);
+    if (!todo) return new Response("Todo not found", { status: 404 });
+    if (todo.user.toString() !== authInfo.id)
+      return new Response("You are not the owner of that requested todo", {
+        status: 400,
+      });
+
+    await deleteTodo(params.id);
+    return new Response();
+  } catch (error) {
+    console.error(error);
+    return new Response("Something went wrong in the server", { status: 500 });
+  }
+}
 
 export async function PATCH(
   req: Request,

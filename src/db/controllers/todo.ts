@@ -4,6 +4,7 @@ import getAuthInfo from "@/utils/get-auth-session";
 import { FilterQuery, HydratedDocument } from "mongoose";
 import dbConnect from "..";
 import { Todo, TodoInput } from "../models";
+import { User } from "../models/user";
 
 export async function getTodos(
   filter: FilterQuery<TodoInput> = {}
@@ -21,17 +22,13 @@ export async function getTodos(
   }
 }
 
-export async function toggleCompletion(id: string) {
-  try {
-    await dbConnect();
-    await Todo.findByIdAndUpdate(id, [
-      { $set: { completed: { $not: "$completed" } } },
-    ]);
-    return { success: true };
-  } catch (error) {
-    console.error(error);
-    return { success: false };
-  }
+export async function addTodo(todo: TodoInput) {
+  await dbConnect();
+  const addedTodo = await Todo.create<HydratedDocument<ITodo>>(todo);
+  await User.findByIdAndUpdate(addedTodo.user, {
+    $push: { todos: addedTodo.id },
+  });
+  return addedTodo.id as string;
 }
 
 export async function deleteTodo(id: string) {

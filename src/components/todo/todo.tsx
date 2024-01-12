@@ -1,5 +1,4 @@
-import { deleteTodo, toggleCompletion } from "@/db/controllers/todo";
-import { Dispatch, SetStateAction, useCallback, useRef } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 
 interface TodoProps {
   todo: ITodo;
@@ -30,8 +29,11 @@ export const Todo = ({
 
     toggleCompletionState();
     try {
-      const res = await toggleCompletion(id);
-      if (!res.success) throw "Something went wrong in the server";
+      const res = await fetch(`/api/todos/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ completed: !completed }),
+      });
+      if (!res.ok) throw "Something went wrong in the server";
     } catch (error) {
       toggleCompletionState();
       console.error(error);
@@ -41,10 +43,11 @@ export const Todo = ({
   const handleDelete = useCallback(async () => {
     setTodos((todos) => todos.filter((todo) => todo.id !== id));
     try {
-      const res = await deleteTodo(id);
-      if (!res.success) throw "Something went wrong in the server";
+      const res = await fetch(`/api/todos/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw "Something went wrong in the server";
     } catch (error) {
-      setTodos((todos) => [...todos, { id, title, completed }]);
       console.error(error);
     }
   }, [setTodos]);

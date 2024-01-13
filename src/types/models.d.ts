@@ -1,6 +1,7 @@
 interface ITodo {
   id: string;
   title: string;
+  user: string;
   completed: boolean;
 }
 

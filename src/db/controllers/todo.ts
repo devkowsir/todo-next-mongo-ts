@@ -31,7 +31,11 @@ export async function addTodo(todo: TodoInput) {
 
 export async function deleteTodo(id: string) {
   await dbConnect();
-  await Todo.findByIdAndDelete(id);
+  const removedTodo = await Todo.findOneAndDelete({ _id: id });
+  if (!removedTodo) return null;
+  await User.findByIdAndUpdate(removedTodo.user, {
+    $pull: { todos: removedTodo.id },
+  });
 }
 
 export async function updateTodo(id: string, data: UpdateQuery<TodoInput>) {

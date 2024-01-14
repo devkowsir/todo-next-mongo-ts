@@ -1,14 +1,14 @@
-import { Model, Schema, SchemaTypes, Types, model, models } from "mongoose";
+import { Model, Schema, model, models } from "mongoose";
 
 export interface TodoInput {
   title: string;
-  user: Types.ObjectId;
+  user: string;
   completed?: boolean;
 }
 
 const todoSchema = new Schema<TodoInput>({
   title: { type: String, required: true, minlength: 2, maxlength: 128 },
-  user: { type: SchemaTypes.ObjectId, required: true, ref: "User" },
+  user: { type: String, required: true, ref: "User" },
   completed: { type: Boolean, default: false },
 });
 

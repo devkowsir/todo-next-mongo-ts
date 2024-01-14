@@ -1,13 +1,13 @@
 "use server";
 
-import { FilterQuery, HydratedDocument, UpdateQuery } from "mongoose";
+import { FilterQuery, UpdateQuery } from "mongoose";
 import dbConnect from "..";
 import { Todo, TodoInput } from "../models";
 import { User } from "../models/user";
 
 export async function getTodos(filter: FilterQuery<TodoInput> = {}) {
   await dbConnect();
-  const todos = await Todo.find<HydratedDocument<ITodo>>(filter);
+  const todos = await Todo.find(filter);
   return todos.map((todo) => ({
     id: todo.id,
     completed: todo.completed,
@@ -22,7 +22,7 @@ export async function getTodo(id: string) {
 
 export async function addTodo(todo: TodoInput) {
   await dbConnect();
-  const addedTodo = await Todo.create<HydratedDocument<ITodo>>(todo);
+  const addedTodo = await Todo.create(todo);
   await User.findByIdAndUpdate(addedTodo.user, {
     $push: { todos: addedTodo.id },
   });

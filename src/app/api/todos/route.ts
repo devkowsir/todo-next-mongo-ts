@@ -1,8 +1,8 @@
 import dbConnect from "@/db";
-import { addTodo, getTodos } from "@/db/controllers/todo";
 import { TodoInput } from "@/db/models";
+import { createTodo, findAllTodos } from "@/db/services/todo.service";
 import getAuthInfo from "@/utils/get-auth-session";
-import { FilterQuery, Types } from "mongoose";
+import { FilterQuery } from "mongoose";
 
 export async function GET() {
   try {
@@ -11,7 +11,7 @@ export async function GET() {
 
     const filter: FilterQuery<TodoInput> = { user: authInfo.id };
     await dbConnect();
-    const todos = await getTodos(filter);
+    const todos = await findAllTodos(filter);
     return new Response(JSON.stringify(todos));
   } catch (error) {
     console.error(error);
@@ -25,9 +25,9 @@ export async function POST(req: Request) {
     if (!body.title) return new Response("Invalid input", { status: 400 });
     const authInfo = getAuthInfo();
     if (!authInfo) return new Response("Unauthorized", { status: 401 });
-    const id = await addTodo({
+    const id = await createTodo({
       title: body.title,
-      user: new Types.ObjectId(authInfo.id),
+      user: authInfo.id,
     });
     return new Response(JSON.stringify({ id }), { status: 201 });
   } catch (error) {

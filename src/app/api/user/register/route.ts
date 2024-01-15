@@ -1,5 +1,5 @@
 import dbConnect from "@/db";
-import { User, UserInput } from "@/db/models/user";
+import { User, UserInput } from "@/db/models";
 import bcrypt from "bcrypt";
 import { Error } from "mongoose";
 

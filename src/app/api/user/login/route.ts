@@ -1,6 +1,6 @@
 import { LoginInput } from "@/app/user/login/page";
 import { cookies } from "next/headers";
-import { User } from "@/db/models/user";
+import { User } from "@/db/models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

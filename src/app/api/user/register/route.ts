@@ -1,5 +1,6 @@
 import dbConnect from "@/db";
-import { User, UserInput } from "@/db/models";
+import { UserInput } from "@/db/models";
+import { createUser } from "@/db/services";
 import bcrypt from "bcrypt";
 import { Error } from "mongoose";
 
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
         status: 400,
       });
     const hashedPass = await bcrypt.hash(body.password, 10);
-    await User.create({ ...body, password: hashedPass });
+    await createUser({ ...body, password: hashedPass });
     return new Response("User Has been successfully registered.", {
       status: 201,
     });

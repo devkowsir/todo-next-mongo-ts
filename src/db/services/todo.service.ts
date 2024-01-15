@@ -1,9 +1,9 @@
 "use server";
 
 import { FilterQuery, UpdateQuery } from "mongoose";
-import dbConnect from "..";
-import { Todo, TodoInput } from "../models";
-import { User } from "../models/user";
+import dbConnect from "@/db";
+import { Todo, TodoInput } from "@/db/models";
+import { User } from "@/db/models/user.model";
 
 export async function getTodos(filter: FilterQuery<TodoInput> = {}) {
   await dbConnect();

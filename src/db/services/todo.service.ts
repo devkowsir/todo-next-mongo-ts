@@ -1,9 +1,18 @@
 "use server";
 
-import { FilterQuery, UpdateQuery } from "mongoose";
 import dbConnect from "@/db";
 import { Todo, TodoInput } from "@/db/models";
 import { User } from "@/db/models/user.model";
+import { FilterQuery, UpdateQuery } from "mongoose";
+
+export async function createTodo(todo: TodoInput) {
+  await dbConnect();
+  const addedTodo = await Todo.create(todo);
+  await User.findByIdAndUpdate(addedTodo.user, {
+    $push: { todos: addedTodo.id },
+  });
+  return addedTodo.id as string;
+}
 
 export async function findAllTodos(filter: FilterQuery<TodoInput> = {}) {
   await dbConnect();
@@ -20,13 +29,10 @@ export async function findTodo(id: string) {
   return await Todo.findById(id, { user: true });
 }
 
-export async function createTodo(todo: TodoInput) {
+export async function updateTodo(id: string, data: UpdateQuery<TodoInput>) {
   await dbConnect();
-  const addedTodo = await Todo.create(todo);
-  await User.findByIdAndUpdate(addedTodo.user, {
-    $push: { todos: addedTodo.id },
-  });
-  return addedTodo.id as string;
+  const updatedDoc = await Todo.findByIdAndUpdate(id, { $set: { ...data } });
+  return updatedDoc?.id ?? null;
 }
 
 export async function deleteTodo(id: string) {
@@ -36,10 +42,4 @@ export async function deleteTodo(id: string) {
   await User.findByIdAndUpdate(removedTodo.user, {
     $pull: { todos: removedTodo.id },
   });
-}
-
-export async function updateTodo(id: string, data: UpdateQuery<TodoInput>) {
-  await dbConnect();
-  const updatedDoc = await Todo.findByIdAndUpdate(id, { $set: { ...data } });
-  return updatedDoc?.id ?? null;
 }

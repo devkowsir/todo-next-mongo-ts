@@ -3,6 +3,7 @@ import { LoginSchema } from "@/schemas/auth.schema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { ZodError } from "zod";
 
 const DAY_IN_SECONDS = 24 * 60 * 60;
 
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
     const user = await findUser({ email: body.email });
     if (!user)
       return new Response("No user is associated with that email.", {
-        status: 400,
+        status: 404,
       });
 
     if (!(await bcrypt.compare(body.password, user.password)))
@@ -33,6 +34,8 @@ export async function POST(req: Request) {
     });
     return new Response();
   } catch (error) {
+    if (error instanceof ZodError)
+      return new Response(error.message, { status: 400 });
     return new Response("Something went wrong", { status: 500 });
   }
 }

@@ -3,6 +3,7 @@
 import dbConnect from "@/db";
 import { Todo, TodoInput } from "@/db/models";
 import { User } from "@/db/models/user.model";
+import { TTodo } from "@/types/models";
 import { FilterQuery, UpdateQuery } from "mongoose";
 
 export async function createTodo(todo: TodoInput) {
@@ -21,12 +22,12 @@ export async function findAllTodos(filter: FilterQuery<TodoInput> = {}) {
     id: todo.id,
     completed: todo.completed,
     title: todo.title,
-  })) as ITodo[];
+  })) as TTodo[];
 }
 
 export async function findTodo(id: string) {
   await dbConnect();
-  return await Todo.findById(id, { user: true });
+  return (await Todo.findById(id, { user: true })) as TTodo;
 }
 
 export async function updateTodo(id: string, data: UpdateQuery<TodoInput>) {

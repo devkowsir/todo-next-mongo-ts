@@ -1,5 +1,9 @@
 import { deleteTodo, findTodo, updateTodo } from "@/db/services/todo.service";
+import { CreateTodoSchema } from "@/schemas/todo.schema";
+import { TTodo } from "@/types/models";
 import getAuthInfo from "@/utils/get-auth-session";
+import { isEmpty } from "@/utils/utils";
+import { ZodError } from "zod";
 
 export async function DELETE(
   _: Request,
@@ -29,12 +33,8 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    interface IUpdates {
-      title?: string;
-      completed?: boolean;
-    }
-    const body = (await req.json()) as IUpdates;
-    if (body.title === undefined || body.completed === undefined)
+    const body = CreateTodoSchema.partial().parse(await req.json());
+    if (isEmpty(body))
       return new Response("Invalid content to update", { status: 400 });
 
     const authInfo = getAuthInfo();
@@ -48,16 +48,13 @@ export async function PATCH(
         status: 400,
       });
 
-    const updates = {} as IUpdates;
-    ["title", "completed"].forEach((key) => {
-      // @ts-ignore
-      if (body[key]) updates[key] = body[key];
-    });
-    const id = await updateTodo(params.id, updates);
-    if (!id) return new Response("Todo not fount", { status: 404 });
-    return new Response();
+    const updatedTodo: TTodo | null = await updateTodo(params.id, body);
+    if (!updatedTodo) return new Response("Todo not fount", { status: 404 });
+    return new Response(JSON.stringify(updateTodo));
   } catch (error) {
     console.error(error);
+    if (error instanceof ZodError)
+      return new Response("Invalid content to update", { status: 400 });
     return new Response("Something went wrong in the server", { status: 500 });
   }
 }

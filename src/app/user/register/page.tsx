@@ -1,12 +1,12 @@
 "use client";
 
-import { UserInput } from "@/db/models/user";
+import { TSignup } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import { FormEventHandler, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
-  const [user, setUser] = useState<UserInput>({
+  const [user, setUser] = useState<TSignup>({
     name: "",
     email: "",
     password: "",

@@ -1,19 +1,7 @@
+import { TUser } from "@/types/models";
 import { Model, Schema, model, models } from "mongoose";
 
-export interface UserInput {
-  name: string;
-  email: string;
-  password: string;
-  todos?: string[];
-  isVerified?: boolean;
-  isAdmin?: boolean;
-  verifyToken?: string;
-  verifyTokenExpiry?: Date;
-  forgotPasswordToken?: string;
-  forgotPasswordExpiry?: Date;
-}
-
-const userSchema = new Schema<UserInput>({
+const userSchema = new Schema<TUser>({
   name: {
     type: String,
     required: true,
@@ -44,4 +32,4 @@ const userSchema = new Schema<UserInput>({
 });
 
 export const User = (models["User"] ||
-  model<UserInput>("User", userSchema, "User")) as Model<UserInput>;
+  model<TUser>("User", userSchema, "User")) as Model<TUser>;

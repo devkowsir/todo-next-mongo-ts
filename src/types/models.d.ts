@@ -1,19 +1,5 @@
-interface ITodo {
-  id: string;
-  title: string;
-  user: string;
-  completed: boolean;
-}
+import { CreateUserSchema, UserSchema } from "@/schemas/user.schema";
+import { z } from "zod";
 
-interface IUser {
-  username: string;
-  email: string;
-  password: string;
-  todos: string[];
-  isVerified: boolean;
-  isAdmin: boolean;
-  verifyToken?: string;
-  verifyTokenExpiry?: Date;
-  forgotPasswordToken?: string;
-  forgotPasswordExpiry?: Date;
-}
+export type TCreateUser = z.infer<typeof CreateUserSchema>;
+export type TUser = z.infer<typeof UserSchema>;

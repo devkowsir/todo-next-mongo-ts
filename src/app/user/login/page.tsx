@@ -1,16 +1,12 @@
 "use client";
 
+import { TLogin } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import { FormEventHandler, useState } from "react";
 
-export interface LoginInput {
-  email: string;
-  password: string;
-}
-
 export default function Page() {
   const router = useRouter();
-  const [user, setUser] = useState<LoginInput>({
+  const [user, setUser] = useState<TLogin>({
     email: "",
     password: "",
   });

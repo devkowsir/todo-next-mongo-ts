@@ -29,9 +29,7 @@ export async function POST(req: Request) {
       }
     );
     const cookieStore = cookies();
-    cookieStore.set("todo-app-jwt", token, {
-      maxAge: Date.now() + DAY_IN_SECONDS,
-    });
+    cookieStore.set("todo-app-jwt", token);
     return new Response();
   } catch (error) {
     if (error instanceof ZodError)

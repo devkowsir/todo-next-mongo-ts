@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       { id: user.id, name: user.name },
       process.env.SECRET!,
       {
-        expiresIn: "7d",
+        expiresIn: "1d",
         issuer: "todo-app",
         subject: user.id,
       }

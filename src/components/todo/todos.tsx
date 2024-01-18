@@ -1,17 +1,20 @@
 "use client";
 
+import { TTodo } from "@/types/models";
+import move from "@/utils/move";
+import { useRouter } from "next/navigation";
 import { DragEventHandler, useState } from "react";
 import { AddTodo } from "./add-todo";
 import { Todo } from "./todo";
-import move from "@/utils/move";
 
 interface TodosProps {
-  initialTodos: ITodo[];
+  initialTodos: TTodo[];
 }
 
 type index = number | null;
 
 export const Todos = ({ initialTodos }: TodosProps) => {
+  const router = useRouter();
   const [todos, setTodos] = useState(initialTodos);
   const [dragItemIndex, setDragItemIndex] = useState<index>(null);
   const [dragOverItemIndex, setDragOverItemIndex] = useState<index>(null);
@@ -23,8 +26,15 @@ export const Todos = ({ initialTodos }: TodosProps) => {
     setDragOverItemIndex(null);
   };
 
+  async function logOut() {
+    router.replace("/user/login");
+  }
+
   return (
     <>
+      <button onClick={logOut} className="w-full text-center mb-4">
+        Log Out
+      </button>
       <AddTodo setTodos={setTodos} />
       <ul
         className="max-w-80 mx-auto flex flex-col gap-2"

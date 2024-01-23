@@ -39,9 +39,10 @@ export async function POST(req: Request) {
     if (!authInfo) return new Response("Unauthorized", { status: 401 });
     const id = await createTodo({
       title: body.title,
+      completed: body.completed ?? false,
       user: authInfo.id,
     });
-    return new Response(id, { status: 201 });
+    return new Response(JSON.stringify({ id }), { status: 201 });
   } catch (error) {
     console.error(error);
     if (error instanceof ZodError)

@@ -1,8 +1,9 @@
+import { TTodo } from "@/types/models";
 import { Dispatch, SetStateAction, useCallback } from "react";
 
 interface TodoProps {
-  todo: ITodo;
-  setTodos: Dispatch<SetStateAction<ITodo[]>>;
+  todo: TTodo;
+  setTodos: Dispatch<SetStateAction<TTodo[]>>;
   setDragItemIndex: Dispatch<SetStateAction<number | null>>;
   setDragOverItemIndex: Dispatch<SetStateAction<number | null>>;
   index: number;

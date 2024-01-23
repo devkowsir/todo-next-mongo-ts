@@ -1,7 +1,8 @@
+import { TTodo } from "@/types/models";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 
 interface AddTodoProps {
-  setTodos: Dispatch<SetStateAction<ITodo[]>>;
+  setTodos: Dispatch<SetStateAction<TTodo[]>>;
 }
 
 export const AddTodo = ({ setTodos }: AddTodoProps) => {
@@ -10,12 +11,7 @@ export const AddTodo = ({ setTodos }: AddTodoProps) => {
   const addTodoHandler = async (e: FormEvent) => {
     e.preventDefault();
     const id = Math.random().toString(); // temporary id for optimistic update
-    const newTodo: ITodo = {
-      id,
-      title,
-      completed: false,
-    };
-    setTodos((todos) => [...todos, newTodo]);
+    setTodos((todos) => [...todos, { title, completed: false, id }]);
     setTitle("");
 
     try {

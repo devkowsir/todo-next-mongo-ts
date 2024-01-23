@@ -3,13 +3,15 @@ import { TodoInput } from "@/db/models";
 import { createTodo, findAllTodos } from "@/db/services/todo.service";
 import { CreateTodoSchema } from "@/schemas/todo.schema";
 import getAuthInfo from "@/utils/get-auth-session";
+import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { FilterQuery } from "mongoose";
 import { ZodError } from "zod";
 
 export async function GET() {
   try {
     const authInfo = getAuthInfo();
-    if (!authInfo) return new Response("Unauthorized", { status: 401 });
+    if (!authInfo)
+      return new Response("JWT auth token expected", { status: 404 });
 
     const filter: FilterQuery<TodoInput> = { user: authInfo.id };
     await dbConnect();
@@ -17,7 +19,16 @@ export async function GET() {
     return new Response(JSON.stringify(todos));
   } catch (error) {
     console.error(error);
-    return new Response("Something went wrong", { status: 500 });
+    if (
+      error instanceof TokenExpiredError ||
+      error instanceof JsonWebTokenError
+    ) {
+      return new Response(error.message, { status: 401 });
+    }
+    return new Response(null, {
+      status: 500,
+      statusText: "Something went wrong",
+    });
   }
 }
 
